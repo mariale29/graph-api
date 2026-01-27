@@ -1,0 +1,25 @@
+.table-sm thead th {
+    padding: 0 !important; /* Ajusta el padding según tus necesidades */
+    font-size: 10px; /* Ajusta el tamaño de la fuente si es necesario */
+    width: auto;
+    height: auto;
+}
+.text-right {
+    text-align: right;
+}
+.table-height {
+    overflow-x: initial !important;
+    overflow-y: initial !important;
+    height: 40% !important; /* or any specific height you want */
+}
+.font {
+    font-family: 'Nunito', serif;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #343a40;
+}
+
+.img-responsive {
+        max-width: 100%; /* Se adapta al ancho del contenedor */
+        height: auto; /* El alto se escala proporcionalmente */
+}
