@@ -1,0 +1,226 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Graph API en Laravel",
+        "description": "Documentación de los endpoints de Node",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000"
+        }
+    ],
+    "paths": {
+        "/api/nodes": {
+            "get": {
+                "tags": [
+                    "Nodos"
+                ],
+                "summary": "Obtener nodos con filtro de padre y profundidad",
+                "operationId": "781a45787aeadeb1cef1b588b0ff66eb",
+                "parameters": [
+                    {
+                        "name": "parent_id",
+                        "in": "query",
+                        "description": "ID del nodo padre para filtrar (opcional)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "depth",
+                        "in": "query",
+                        "description": "Nivel de profundidad de hijos a cargar (ej. 1 o 2)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de nodos obtenida. Ejemplos: /api/nodes (raíces), /api/nodes?depth=2 (raíces con 2 niveles)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parámetros de consulta inválidos"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Nodos"
+                ],
+                "summary": "Crear un nodo con headers específicos",
+                "operationId": "cfafd706d8524f357d2d40d0c7747598",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Idioma preferido para la respuesta",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "es"
+                        }
+                    },
+                    {
+                        "name": "X-Timezone",
+                        "in": "header",
+                        "description": "Zona horaria del cliente",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "America/Caracas"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id",
+                                    "parent_id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 17
+                                    },
+                                    "parent_id": {
+                                        "type": "integer",
+                                        "example": 16
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Nodo creado correctamente"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/parent": {
+            "get": {
+                "tags": [
+                    "Nodos"
+                ],
+                "summary": "Obtener lista de nodos padres",
+                "operationId": "b54527e95835557c203b3327f2ba4522",
+                "responses": {
+                    "200": {
+                        "description": "Lista de nodos raíces (sin padres) obtenida con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor al procesar la consulta"
+                    }
+                }
+            }
+        },
+        "/api/children/{node}": {
+            "get": {
+                "tags": [
+                    "Nodos"
+                ],
+                "summary": "Obtener nodos hijos dado su padre",
+                "operationId": "18d7974fbe1f3ddccc29552baf664b72",
+                "parameters": [
+                    {
+                        "name": "node",
+                        "in": "path",
+                        "description": "ID del nodo padre",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa. Devuelve una lista de hijos o un array vacío si no tiene.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "El nodo solicitado no existe"
+                    }
+                }
+            }
+        },
+        "/api/nodes/{node}": {
+            "delete": {
+                "tags": [
+                    "Nodos"
+                ],
+                "summary": "Eliminar un nodo",
+                "operationId": "4d276f68672940f0657362201e09e927",
+                "parameters": [
+                    {
+                        "name": "node",
+                        "in": "path",
+                        "description": "ID del nodo a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Nodo eliminado correctamente"
+                    },
+                    "400": {
+                        "description": "No se puede eliminar un nodo que posee hijos (children)."
+                    },
+                    "404": {
+                        "description": "El nodo solicitado no existe"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Nodos",
+            "description": "Nodos"
+        }
+    ]
+}
